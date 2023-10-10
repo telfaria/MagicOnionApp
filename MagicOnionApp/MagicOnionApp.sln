@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicOnionApp.Server", "..\MagicOnionApp.Server\MagicOnionApp.Server.csproj", "{E1AC5FF2-EA7A-43FB-A277-6CB69172D170}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicOnionApp.Client", "..\MagicOnionApp.Client\MagicOnionApp.Client.csproj", "{F8AD47DD-3F48-4DFF-804A-CD56174F5D9F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonInterface", "CommonInterface", "{0398A755-9B67-464C-9F02-42D17399C894}"
+	ProjectSection(SolutionItems) = preProject
+		MagicOnion.Intercafe.cs = MagicOnion.Intercafe.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E1AC5FF2-EA7A-43FB-A277-6CB69172D170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1AC5FF2-EA7A-43FB-A277-6CB69172D170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1AC5FF2-EA7A-43FB-A277-6CB69172D170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1AC5FF2-EA7A-43FB-A277-6CB69172D170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8AD47DD-3F48-4DFF-804A-CD56174F5D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8AD47DD-3F48-4DFF-804A-CD56174F5D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8AD47DD-3F48-4DFF-804A-CD56174F5D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8AD47DD-3F48-4DFF-804A-CD56174F5D9F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E65A433-DD29-43D7-B87F-1F927498D597}
+	EndGlobalSection
+EndGlobal
