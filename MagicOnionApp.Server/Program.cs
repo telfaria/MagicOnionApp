@@ -1,31 +1,33 @@
-﻿using MagicOnion.Server;
+﻿using MagicOnion;
+using MagicOnion.Server;
 using MagicOnionApp.Shared;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MagicOnionApp.Server
 {
 
-    public class MagicOnionAppService : ServiceBase<IMagicOnionAppService>, IMagicOnionAppService
-    {
-        public async Task<int> SumAsync(int x, int y)
-        {
-            Console.WriteLine("Called SumAsync");
-            return x + y;
-        }
-    }
-
+ 
 
     internal class Program
     {
         static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddGrpc();
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                // WORKAROUND: Accept HTTP/2 only to allow insecure HTTP/2 connections during development.
+                options.ConfigureEndpointDefaults(endpointOptions =>
+                {
+                    endpointOptions.Protocols = HttpProtocols.Http2;
+                });
+            });
+            builder.Services.AddGrpc();  // MagicOnion depends on ASP.NET Core gRPC service.
             builder.Services.AddMagicOnion();
 
-            var app=builder.Build();
-
+            var app = builder.Build();
             app.MapMagicOnionService();
 
             app.Run();

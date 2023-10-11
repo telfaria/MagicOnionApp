@@ -1,3 +1,5 @@
+using System.Threading.Channels;
+
 namespace MagicOnionApp.Client
 {
     internal static class Program
