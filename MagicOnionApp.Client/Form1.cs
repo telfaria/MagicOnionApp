@@ -5,7 +5,6 @@ using System.Threading.Channels;
 using Grpc.Core;
 using Grpc.Net.Client;
 using MagicOnion.Server.Hubs;
-using MagicOnionApp.Hubs;
 using MagicOnionApp.Shared;
 
 namespace MagicOnionApp.Client
@@ -37,8 +36,8 @@ namespace MagicOnionApp.Client
                     cancellationToken: shutdowncancelletion.Token);
             
             txtResult.AppendText("Connect: http://localhost:5000 \r\n");
-            var res = await streamingclient.JoinAsync("RoomC", "User1");
-
+            //var res = await streamingclient.JoinAsync("RoomC", "User1");
+            //サーバーからクライアントにブロードキャストしたい
             
 
         }
