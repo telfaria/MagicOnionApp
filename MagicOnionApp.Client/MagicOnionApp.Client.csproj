@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="..\MagicOnionApp\MagicOnion.Hubs.cs" Link="MagicOnion.Hubs.cs" />
     <Compile Include="..\MagicOnionApp\MagicOnion.Intercafe.cs" Link="MagicOnion.Intercafe.cs" />
+    <Compile Include="..\MagicOnionApp\MagicOnion.MessagePackObjects.cs" Link="MagicOnion.MessagePackObjects.cs" />
   </ItemGroup>
 
   <ItemGroup>

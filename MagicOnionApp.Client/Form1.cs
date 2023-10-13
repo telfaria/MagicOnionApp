@@ -37,7 +37,8 @@ namespace MagicOnionApp.Client
                     cancellationToken: shutdowncancelletion.Token);
             
             txtResult.AppendText("Connect: http://localhost:5000 \r\n");
-            //await streamingclient.JoinAsync("RoomC", "User1");
+            var res = await streamingclient.JoinAsync("RoomC", "User1");
+
             
 
         }

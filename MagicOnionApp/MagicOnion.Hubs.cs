@@ -3,8 +3,9 @@ using MagicOnion;
 using MagicOnion.Server;
 using MagicOnion.Server.Hubs;
 using MessagePack;
+using MagicOnionApp.Shared.MessagePackObjects;
 
-namespace MagicOnionApp.Hubs
+namespace MagicOnionApp.Shared
 {
 
     public interface IGroupHub : IStreamingHub<IGroupHub, IGroupHubReceiver>
@@ -59,7 +60,9 @@ namespace MagicOnionApp.Hubs
 
         public async void OnJoin(string name)
         {
-            //return $"Connected {name}";
+            var mes = new BroadCastMessages();
+            mes.message = $"Connected {name}";
+            
         }
 
         public async void OnLeave(string name)
