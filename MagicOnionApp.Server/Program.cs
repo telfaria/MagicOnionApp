@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 
 namespace MagicOnionApp.Server
 {
@@ -23,6 +24,7 @@ namespace MagicOnionApp.Server
                 {
                     endpointOptions.Protocols = HttpProtocols.Http2;
                 });
+                options.Listen(new IPEndPoint(IPAddress.Loopback, 5555));
             });
             builder.Services.AddGrpc();  // MagicOnion depends on ASP.NET Core gRPC service.
             builder.Services.AddMagicOnion();
