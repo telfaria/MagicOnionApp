@@ -1,79 +1,119 @@
 ﻿using System;
+using System.Diagnostics;
+using Grpc.Core;
 using MagicOnion;
+using MagicOnion.Client;
 using MagicOnion.Server;
 using MagicOnion.Server.Hubs;
 using MessagePack;
 using MagicOnionApp.Shared.MessagePackObjects;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
+using Microsoft.Extensions.Logging;
 
 namespace MagicOnionApp.Shared
 {
 
     public interface IGroupHub : IStreamingHub<IGroupHub, IGroupHubReceiver>
     {
-        Task JoinAsync(string roomname, string name);
+        ValueTask<BroadCastMessages[]> JoinAsync(string room, string name);
 
-        Task LeaveAsync();
+        ValueTask LeaveAsync();
 
-        Task SendMessageAsync(string username, string message);
+        Task<BroadCastMessages> SendMessageAsync(string username, string message);
     }
 
     public interface IGroupHubReceiver
     {
-        void OnJoin(string name);
+        void OnJoin(BroadCastMessages bcm);
 
-        void OnLeave(string name);
+        void OnLeave(BroadCastMessages bcm);
 
-        void OnSendMessage(string name, string message);
+        void OnSendMessage(BroadCastMessages bcm);
     }
 
 
-    public class GroupHubReceiver : StreamingHubBase<IGroupHub,IGroupHubReceiver> , IGroupHub
+    public class GroupHub : StreamingHubBase<IGroupHub,IGroupHubReceiver> , IGroupHub
     {
         private IGroup group;
-        private string username;
+        private BroadCastMessages bcm;
+        private IInMemoryStorage<BroadCastMessages> storage;
 
-        public async Task JoinAsync(string room, string name)
+        public async ValueTask<BroadCastMessages[]> JoinAsync(string room, string name)
         {
-            this.username = name;
-            group = await Group.AddAsync(room);
-            Broadcast(group).OnJoin(name);
+            bcm = new BroadCastMessages();
+            bcm.message = $"Join {name} : Room {room} \r\n";
+            bcm.username = name;
+
+            (group,storage) = await Group.AddAsync(room,bcm);
+
+            Broadcast(group).OnJoin(bcm);
+            return storage.AllValues.ToArray();
         }
 
-        public async Task LeaveAsync()
+        public async ValueTask LeaveAsync()
         {
             await group.RemoveAsync(this.Context);
-            Broadcast(group).OnLeave(username);
+            Broadcast(group).OnLeave(bcm);
         }
 
-        public async Task SendMessageAsync(string name, string message)
+        public async Task<BroadCastMessages> SendMessageAsync(string name, string message)
         {
-            Broadcast(group).OnSendMessage(name, message);
+            bcm = new BroadCastMessages() { message = message, username = name };
+            Broadcast(group).OnSendMessage(bcm);
             await Task.CompletedTask;
+            return bcm;
         }
 
     }
 
-    public class Grouphub : IGroupHubReceiver
+    public class GrouphubClient : IGroupHubReceiver
     {
-        private string roomname = "RoomC";
-        private string username = "user1";
+        public Dictionary<string, BroadCastMessages> connectUsers = new Dictionary<string, BroadCastMessages>();
 
-        public async void OnJoin(string name)
+        private IGroupHub client;
+
+        public async ValueTask<BroadCastMessages> ConnectAsync(ChannelBase grpcChannnel, string roomname,
+            string username)
         {
-            var mes = new BroadCastMessages();
-            mes.message = $"Connected {name}";
-            
+            this.client = await StreamingHubClient.ConnectAsync<IGroupHub, IGroupHubReceiver>(grpcChannnel, this);
+
+            var roomusers = await client.JoinAsync(roomname,username);
+
+            foreach (var user in roomusers)
+            {
+                (this as IGroupHubReceiver).OnJoin(user);
+            }
+            return connectUsers[username];
         }
 
-        public async void OnLeave(string name)
+        public ValueTask LeaveAsync()
         {
-            //return $"Disconnected {name}";
+            return client.LeaveAsync();
         }
 
-        public async void OnSendMessage(string name, string message)
+
+        public async void OnJoin(BroadCastMessages bcm)
         {
-            //return $"{name} : {message}";
+            connectUsers[bcm.username] = bcm;
+            //connectUsers[bcm.username].message = $"Welcome, {bcm.username}!";
+            Debug.WriteLine(connectUsers[bcm.username].message);
+
         }
+
+        public async void OnLeave(BroadCastMessages bcm)
+        {
+            connectUsers[bcm.username].message = $"Bye! {bcm.username}!";
+            Debug.WriteLine(connectUsers[bcm.username].message);
+        }
+
+        public async void OnSendMessage(BroadCastMessages bcm)
+        {
+            connectUsers[bcm.username].message = bcm.message;
+            Debug.WriteLine(connectUsers[bcm.username].message);
+        }
+
+
     }
 
 }
