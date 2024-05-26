@@ -40,6 +40,19 @@ namespace MagicOnionApp.Client
             //サーバーからクライアントにブロードキャストしたい
 
 
+        private async void ConnectStreamingHub()
+        {
+            channel = GrpcChannel.ForAddress("http://localhost:5000");
+            currentUser = "User1";
+            var ret = await hubClient.ConnectAsync(channel, "RoomC", currentUser);
+
+            txtResult.AppendText(ret.message);
+
+        }
+
+        private async ValueTask DisConnectStreamingHub()
+        {
+            hubClient.LeaveAsync();
         }
 
         private async void ConnectStreamingHub()
