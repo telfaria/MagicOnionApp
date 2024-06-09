@@ -36,6 +36,8 @@
             label1 = new Label();
             btnSendMessage = new Button();
             btnHubDisConnect = new Button();
+            btnClearLog = new Button();
+            lblUserName = new Label();
             SuspendLayout();
             // 
             // btnQuery
@@ -53,7 +55,8 @@
             txtResult.Location = new Point(174, 13);
             txtResult.Multiline = true;
             txtResult.Name = "txtResult";
-            txtResult.Size = new Size(215, 121);
+            txtResult.ScrollBars = ScrollBars.Both;
+            txtResult.Size = new Size(215, 174);
             txtResult.TabIndex = 1;
             // 
             // btnConnect
@@ -68,7 +71,7 @@
             // 
             // btnHubConnect
             // 
-            btnHubConnect.Location = new Point(12, 139);
+            btnHubConnect.Location = new Point(5, 138);
             btnHubConnect.Name = "btnHubConnect";
             btnHubConnect.Size = new Size(163, 23);
             btnHubConnect.TabIndex = 2;
@@ -78,7 +81,7 @@
             // 
             // txtMessage
             // 
-            txtMessage.Location = new Point(91, 168);
+            txtMessage.Location = new Point(81, 196);
             txtMessage.Name = "txtMessage";
             txtMessage.Size = new Size(389, 23);
             txtMessage.TabIndex = 3;
@@ -86,7 +89,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(27, 171);
+            label1.Location = new Point(17, 199);
             label1.Name = "label1";
             label1.Size = new Size(58, 15);
             label1.TabIndex = 4;
@@ -94,7 +97,7 @@
             // 
             // btnSendMessage
             // 
-            btnSendMessage.Location = new Point(356, 197);
+            btnSendMessage.Location = new Point(346, 225);
             btnSendMessage.Name = "btnSendMessage";
             btnSendMessage.Size = new Size(124, 23);
             btnSendMessage.TabIndex = 5;
@@ -104,19 +107,39 @@
             // 
             // btnHubDisConnect
             // 
-            btnHubDisConnect.Location = new Point(181, 140);
+            btnHubDisConnect.Location = new Point(5, 167);
             btnHubDisConnect.Name = "btnHubDisConnect";
-            btnHubDisConnect.Size = new Size(208, 23);
+            btnHubDisConnect.Size = new Size(163, 23);
             btnHubDisConnect.TabIndex = 6;
             btnHubDisConnect.Text = "Disconnect StreamingHub";
             btnHubDisConnect.UseVisualStyleBackColor = true;
             btnHubDisConnect.Click += btnHubDisConnect_Click;
+            // 
+            // btnClearLog
+            // 
+            btnClearLog.Location = new Point(395, 164);
+            btnClearLog.Name = "btnClearLog";
+            btnClearLog.Size = new Size(75, 23);
+            btnClearLog.TabIndex = 7;
+            btnClearLog.Text = "Clear Log";
+            btnClearLog.UseVisualStyleBackColor = true;
+            btnClearLog.Click += btnClearLog_Click;
+            // 
+            // lblUserName
+            // 
+            lblUserName.Font = new Font("Yu Gothic UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            lblUserName.Location = new Point(409, 20);
+            lblUserName.Name = "lblUserName";
+            lblUserName.Size = new Size(169, 55);
+            lblUserName.TabIndex = 8;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(604, 316);
+            Controls.Add(lblUserName);
+            Controls.Add(btnClearLog);
             Controls.Add(btnHubDisConnect);
             Controls.Add(btnSendMessage);
             Controls.Add(label1);
@@ -141,5 +164,7 @@
         private Label label1;
         private Button btnSendMessage;
         private Button btnHubDisConnect;
+        private Button btnClearLog;
+        private Label lblUserName;
     }
 }

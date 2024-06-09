@@ -35,8 +35,9 @@ namespace MagicOnionApp.Shared
         {
             this.userName = userName;
             this.room = await Group.AddAsync("DefaultRoom");
-            await this.room.AddAsync(this.Context);
-            Console.WriteLine($"Join {userName}");
+            //await this.room.AddAsync(this.Context);
+            BroadcastExceptSelf(room).OnReceiveMessage("Welcome",this.userName);
+            Console.WriteLine($"Join {userName} from {room}");
         }
 
         public async Task LeaveAsync()
@@ -48,7 +49,7 @@ namespace MagicOnionApp.Shared
         public async Task SendMessageAsync(string message)
         {
             Console.WriteLine($"ReceiveMessage:  {userName} : {message}");
-            Broadcast(room).OnReceiveMessage(userName, message);
+            BroadcastExceptSelf(room).OnReceiveMessage(userName, message);
             Console.WriteLine($"SendMessage: {userName} : {message}");
         }
     }

@@ -16,7 +16,7 @@ namespace MagicOnionApp.Client
     {
         private GrpcChannel channel;
         private IMagicOnionAppService client;
-        private CancellationTokenSource shutdowncancelletion = new CancellationTokenSource();
+        //private CancellationTokenSource shutdowncancelletion = new CancellationTokenSource();
         //private IGroupHub streamingclient;
         //private IGroupHubReceiver streamingclientreceiver;
         private BroadCastMessages broadcastmessage = new BroadCastMessages();
@@ -28,6 +28,7 @@ namespace MagicOnionApp.Client
         public Form1()
         {
             InitializeComponent();
+            lblUserName.Text = $"StreamingHub Disconnected";
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -48,12 +49,13 @@ namespace MagicOnionApp.Client
         private async void ConnectStreamingHub()
         {
             channel = GrpcChannel.ForAddress("http://localhost:5555");
-            currentUser = "User" + new Random().Next(1,100);
+            currentUser = "User" + new Random().Next(1, 100);
             chatHub = StreamingHubClient.Connect<IChatHub, IChatHubReceiver>(channel, this);
 
             await chatHub.JoinAsync(currentUser);
 
             txtResult.AppendText($"Join {currentUser}{Environment.NewLine}");
+            lblUserName.Text = $"Your:{currentUser}";
 
             //await Task.Delay(-1);
         }
@@ -62,11 +64,13 @@ namespace MagicOnionApp.Client
         {
             await chatHub.LeaveAsync();
             txtResult.AppendText($"Leave {currentUser}{Environment.NewLine}");
+            await chatHub.DisposeAsync();
+            lblUserName.Text = $"StreamingHub Disconnected";
         }
 
         public async void OnReceiveMessage(string username, string message)
         {
-            if (username == currentUser) return;
+            //if (username == currentUser) return;
             txtResult.AppendText($"Receive: {username}: {message}{Environment.NewLine}");
         }
 
@@ -104,6 +108,9 @@ namespace MagicOnionApp.Client
             await DisConnectStreamingHub();
         }
 
-
+        private void btnClearLog_Click(object sender, EventArgs e)
+        {
+            txtResult.Clear();
+        }
     }
 }
